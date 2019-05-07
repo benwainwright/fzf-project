@@ -1,5 +1,10 @@
-let g:fzfSwitchProjectsProjects = [  ]
-let g:fzfSwitchProjectWorkspaces = [  ]
+if !exists('g:fzfSwitchProjectsProjects')
+  let g:fzfSwitchProjectsProjects = [  ]
+end
+
+if !exists('g:fzfSwitchProjectsWorkspaces')
+  let g:fzfSwitchProjectWorkspaces = [  ]
+end
 
 function! s:switchToProjectDir(dir)
   execute 'cd ' . a:dir
