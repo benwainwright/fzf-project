@@ -1,9 +1,9 @@
-if !exists('g:fzfSwitchProjectsProjects')
-  let g:fzfSwitchProjectsProjects = [  ]
+if !exists('g:fzfSwitchProjectProjects')
+  let g:fzfSwitchProjectProjects = [  ]
 end
 
-if !exists('g:fzfSwitchProjectsWorkspaces')
-  let g:fzfSwitchProjectWorkspaces = [  ]
+if !exists('g:fzfSwitchProjectWorkspaces')
+e let g:fzfSwitchProjectWorkspaces = [  ]
 end
 
 function! s:switchToProjectDir(dir)
@@ -22,7 +22,7 @@ endfunction
 function! FzfSwitchProject()
 
   let l:projects = s:getProjectDirs(
-        \ g:fzfSwitchProjectsProjects,
+        \ g:fzfSwitchProjectProjects,
         \ g:fzfSwitchProjectWorkspaces
         \ )
 
