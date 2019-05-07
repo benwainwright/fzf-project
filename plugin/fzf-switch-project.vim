@@ -33,3 +33,5 @@ function! FzfSwitchProject()
         \ 'down': '40%',
         \ })
 endfunction
+
+command FzfSwitchProject call FzfSwitchProject()<CR>
