@@ -3,7 +3,7 @@ if !exists('g:fzfSwitchProjectProjects')
 end
 
 if !exists('g:fzfSwitchProjectWorkspaces')
-e let g:fzfSwitchProjectWorkspaces = [  ]
+ let g:fzfSwitchProjectWorkspaces = [  ]
 end
 
 function! s:switchToProjectDir(dir)
