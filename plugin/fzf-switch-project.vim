@@ -15,7 +15,7 @@ function! s:getProjectDirs(projects, projectDirs)
   let l:output = [ ]
   for dir in a:projectDirs
     let l:command = 'find ' . dir . ' -name .git -type d -mindepth 2 -maxdepth 2 -exec dirname {} \;'
-    let l:output = systemlist(l:command)
+    let l:output = l:output + systemlist(l:command)
   endfor
   return a:projects + l:output
 endfunction
