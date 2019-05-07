@@ -34,4 +34,4 @@ function! FzfSwitchProject()
         \ })
 endfunction
 
-command FzfSwitchProject call FzfSwitchProject()<CR>
+command FzfSwitchProject call FzfSwitchProject()
