@@ -1,16 +1,29 @@
-function! Open_files_in_dir(dir)
+let g:fzfSwitchProjectsProjects = [  ]
+let g:fzfSwitchProjectWorkspaces = [  ]
+
+function! s:switchToProjectDir(dir)
   execute 'cd ' . a:dir
   GitFiles
 endfunction
 
-function! Get_project_dirs(projects, projectDirs)
+function! s:getProjectDirs(projects, projectDirs)
+  let l:output = [ ]
   for dir in a:projectDirs
     let l:output = systemlist('find ' . dir . ' -type d -maxdepth 1')
   endfor
-  projects = projects + l:output
-  return projects
+  return a:projects + l:output
 endfunction
 
-function! 
+function! FzfSwitchProject()
 
+  let l:projects = s:getProjectDirs(
+        \ g:fzfSwitchProjectsProjects,
+        \ g:fzfSwitchProjectWorkspaces
+        \ )
 
+  call fzf#run({
+        \ 'sink': function('s:switchToProjectDir'),
+        \ 'source': l:projects,
+        \ 'down': '40%',
+        \ })
+endfunction
