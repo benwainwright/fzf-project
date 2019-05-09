@@ -3,7 +3,7 @@ fzf-switch-project
 
 This plugin provides an easy way of switching between project directories
 indexed from a specified workspace folder or folders. I originally stole 
-from @kieran-bamforth 's dotfiles.
+from [kieran-bamforth](https://github.com/kieran-bamforth) 's dotfiles.
 
 Install
 -------
