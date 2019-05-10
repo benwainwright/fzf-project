@@ -51,26 +51,26 @@ function! s:formatProjectList(dirs)
   return s:generateProjectListLines(l:dirParts, l:longest) 
 endfunction
 
-function! s:getProjectDirs(projects, projectDirs)
+function! s:getAllDirsFromWorkspaces(workspaces)
   let l:dirs = [  ]
-  let l:command = s:getProjectDirsCommand(a:projectDirs)
+  let l:command = s:getProjectDirsCommand(a:workspaces)
   let l:gitDirs = systemlist(l:command)
   for gitDir in l:gitDirs
     call add(l:dirs, fnamemodify(gitDir, ':h'))
   endfor
-  return s:formatProjectList(a:projects + l:dirs)
+  return l:dirs
 endfunction
 
 function! FzfSwitchProject()
-
-  let l:projects = s:getProjectDirs(
-        \ g:fzfSwitchProjectProjects,
+  let l:projects = s:getAllDirsFromWorkspaces(
         \ g:fzfSwitchProjectWorkspaces
         \ )
 
+  let l:projects = l:projects + g:fzfSwitchProjectProjects
+
   call fzf#run({
         \ 'sink': function('s:switchToProjectDir'),
-        \ 'source': l:projects,
+        \ 'source': s:formatProjectList(l:projects),
         \ 'down': '40%',
         \ })
 endfunction
