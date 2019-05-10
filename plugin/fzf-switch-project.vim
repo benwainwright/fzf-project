@@ -13,17 +13,6 @@ function! s:switchToProjectDir(projectLine)
   GitFiles
 endfunction
 
-function! s:getProjectDirsCommand(dirs)
-  let l:dirsString = join(a:dirs, ' ')
-    return 'find '
-          \ . l:dirsString 
-          \ . ' -name .git'
-          \ . ' -type d'
-          \ . ' -mindepth 2'
-          \ . ' -maxdepth 2'
-  endif
-endfunction
-
 function! s:generateProjectListLines(dirParts, longest)
   let l:outputLines = [  ]
   for dir in a:dirParts
@@ -52,13 +41,12 @@ function! s:formatProjectList(dirs)
 endfunction
 
 function! s:getAllDirsFromWorkspaces(workspaces)
-  let l:dirs = [  ]
-  let l:command = s:getProjectDirsCommand(a:workspaces)
-  let l:gitDirs = systemlist(l:command)
-  for gitDir in l:gitDirs
-    call add(l:dirs, fnamemodify(gitDir, ':h'))
+  let l:dirs = globpath(join(a:workspaces, ','), '*/.git', 1)
+  let l:output = []
+  for dir in split(l:dirs, "\n")
+    call add(l:output, fnamemodify(dir, ':h'))
   endfor
-  return l:dirs
+  return l:output
 endfunction
 
 function! FzfSwitchProject()
@@ -75,4 +63,4 @@ function! FzfSwitchProject()
         \ })
 endfunction
 
-command FzfSwitchProject call FzfSwitchProject()
+command! FzfSwitchProject call FzfSwitchProject()
