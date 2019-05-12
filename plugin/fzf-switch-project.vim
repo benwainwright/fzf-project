@@ -16,7 +16,7 @@ function! s:switchToProjectDir(projectLine)
     endif
 
     if s:chooseFile
-      let l:file = s:browseProject()
+      FzfChooseProjectFile()
     endif
   finally
     let &autochdir = autochdir
@@ -39,23 +39,6 @@ endfunction
 function! s:getGitRoot()
   let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
   return v:shell_error ? '' : root
-endfunction
-
-function! s:browseProject()
-  let l:opts = { 
-        \ 'sink*' : function('s:switchToFile'),
-        \ 'down': '40%',
-        \ 'options': [
-            \ '--print-query',
-            \ '--header', 'Choose existing file, or enter the name of a new file',
-            \ '--prompt', 'Filename> ' 
-            \ ]
-        \ }
-  if FugitiveIsGitDir(getcwd() . '/.git') 
-    let l:is_win = has('win32') || has('win64')
-    let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
-  endif
-  return fzf#run(l:opts)
 endfunction
 
 function! s:switchToFile(lines)
@@ -108,6 +91,23 @@ function! s:getAllDirsFromWorkspaces(workspaces)
   return l:output
 endfunction
 
+function! FzfChooseProjectFile() 
+  let l:opts = { 
+        \ 'sink*' : function('s:switchToFile'),
+        \ 'down': '40%',
+        \ 'options': [
+            \ '--print-query',
+            \ '--header', 'Choose existing file, or enter the name of a new file',
+            \ '--prompt', 'Filename> ' 
+            \ ]
+        \ }
+  if FugitiveIsGitDir(getcwd() . '/.git') 
+    let l:is_win = has('win32') || has('win64')
+    let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
+  endif
+  return fzf#run(l:opts)
+endfunction
+
 function! FzfSwitchProject()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces)
 
@@ -120,3 +120,4 @@ function! FzfSwitchProject()
 endfunction
 
 command! FzfSwitchProject call FzfSwitchProject()
+command! FzfChooseProjectFile call FzfChooseProjectFile()
