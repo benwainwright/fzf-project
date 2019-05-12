@@ -37,7 +37,11 @@ function! s:browseProject()
   let l:opts = { 
         \ 'sink*' : function('s:switchToFile'),
         \ 'down': '40%',
-        \ 'options': '--print-query',
+        \ 'options': [
+            \ '--print-query',
+            \ '--header', 'Choose existing file, or enter the name of a new file',
+            \ '--prompt', 'filename> '
+            \ ]
         \ }
   let l:gitRoot = s:getGitRoot()
 
