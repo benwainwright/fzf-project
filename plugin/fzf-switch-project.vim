@@ -4,15 +4,23 @@ let s:gitInit = get(g:, 'fzfSwitchProjectsGitInitBehaviour', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectsAlwaysChooseFile', 1)
 
 function! s:switchToProjectDir(projectLine)
-  let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
-  let l:path = l:parts[2] . '/' . l:parts[1]
-  execute 'cd ' . l:path
+  try
+    let autochdir = &autochdir
+    set noautochdir
+    let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
+    let l:path = l:parts[2] . '/' . l:parts[1]
+    execute 'cd ' . l:path
 
-  call s:initGitRepoIfRequired(s:gitInit)
+    if s:gitInit !=# 'none'
+      call s:initGitRepoIfRequired(s:gitInit)
+    endif
 
-  if s:chooseFile
-    let l:file = s:browseProject()
-  endif
+    if s:chooseFile
+      let l:file = s:browseProject()
+    endif
+  finally
+    let &autochdir = autochdir
+  endtry
 endfunction
 
 function! s:initGitRepoIfRequired(behaviour)
@@ -40,38 +48,28 @@ function! s:browseProject()
         \ 'options': [
             \ '--print-query',
             \ '--header', 'Choose existing file, or enter the name of a new file',
-            \ '--prompt', 'filename> '
+            \ '--prompt', 'Filename> ' 
             \ ]
         \ }
-  let l:gitRoot = s:getGitRoot()
-
-  if !empty(l:gitRoot)
-    let l:opts['dir'] = l:gitRoot
+  if FugitiveIsGitDir(getcwd() . '/.git') 
     let l:is_win = has('win32') || has('win64')
-    let l:opts['source'] = 'git ls-files' . (l:is_win ? '' : ' | uniq')
+    let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
   endif
-
   return fzf#run(l:opts)
 endfunction
 
 function! s:switchToFile(lines)
-  try
-    let autochdir = &autochdir
-    let l:query = a:lines[0]
-    set noautochdir
-    if(len(a:lines) > 1)
-      let l:file = a:lines[1]
-      execute 'edit ' . l:file
-    else
-      let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
-      if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
-        execute 'edit ' . l:query
-        write
-      endif
+  let l:query = a:lines[0]
+  if(len(a:lines) > 1)
+    let l:file = a:lines[1]
+    execute 'edit ' . l:file
+  else
+    let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
+    if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
+      execute 'edit ' . l:query
+      write
     endif
-  finally
-    let &autochdir = autochdir
-  endtry
+  endif
 endfunction
 
 function! s:generateProjectListLines(dirParts, longest)
@@ -79,7 +77,7 @@ function! s:generateProjectListLines(dirParts, longest)
   for dir in a:dirParts
     let l:padding = a:longest - len(dir['name'])
     let l:line = dir['name'] 
-          \ . repeat(' ', l:padding) 
+        \ . repeat(' ', l:padding) 
           \ . ' ' . dir['dir']
     call add(l:outputLines, l:line)
   endfor
