@@ -21,12 +21,26 @@ Configure
 let g:fzfSwitchProjectWorkspaces = [ '~/workspace1', '~/workspace2' ]
 ```
 
-or if you want to add individual folders to the project list (I use it for my
-dotfiles folder)
+automatically list projects in the above folders
 
 ```vim
 let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 ```
+
+add individual folders to the project list (I use it for my
+dotfiles folder)
+
+```vim
+let g:fzfSwitchProjectsGitInitBehaviour = 'ask' " default
+```
+
+`fzf-switch-project` can automatically initialise a git repository for you if
+you switch to a project folder without one. The possible values are:
+
+- `ask` (default) prompt the user to confirm if a new git repository should be
+    initialised
+- `auto` always initialise a new git repository if one isn't found
+- `none` do nothing
 
 Usage
 -----
