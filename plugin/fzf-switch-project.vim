@@ -58,9 +58,9 @@ function! s:switchToFile(lines)
   try
     let autochdir = &autochdir
     let l:query = a:lines[0]
+    set noautochdir
     if(len(a:lines) > 1)
       let l:file = a:lines[1]
-      set noautochdir
       execute 'edit ' . l:file
     else
       let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
