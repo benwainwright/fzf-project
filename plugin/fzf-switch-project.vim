@@ -1,10 +1,5 @@
-if !exists('g:fzfSwitchProjectProjects')
-  let g:fzfSwitchProjectProjects = [  ]
-end
-
-if !exists('g:fzfSwitchProjectWorkspaces')
- let g:fzfSwitchProjectWorkspaces = [  ]
-end
+let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
+let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 
 function! s:switchToProjectDir(projectLine)
   let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
@@ -50,12 +45,9 @@ function! s:getAllDirsFromWorkspaces(workspaces)
 endfunction
 
 function! FzfSwitchProject()
-  let l:projects = s:getAllDirsFromWorkspaces(
-        \ g:fzfSwitchProjectWorkspaces
-        \ )
+  let l:projects = s:getAllDirsFromWorkspaces(s:workspaces)
 
-  let l:projects = l:projects + g:fzfSwitchProjectProjects
-
+  let l:projects = l:projects + s:projects 
   call fzf#run({
         \ 'sink': function('s:switchToProjectDir'),
         \ 'source': s:formatProjectList(l:projects),
