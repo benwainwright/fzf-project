@@ -1,11 +1,73 @@
 let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
+let s:gitInit = get(g:, 'fzfSwitchProjectsGitInitBehaviour', 'ask')
+let s:chooseFile = get(g:, 'fzfSwitchProjectsAlwaysChooseFile', 1)
 
 function! s:switchToProjectDir(projectLine)
   let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
   let l:path = l:parts[2] . '/' . l:parts[1]
   execute 'cd ' . l:path
-  GitFiles
+
+  call s:initGitRepoIfRequired(s:gitInit)
+
+  if s:chooseFile
+    let l:file = s:browseProject()
+  endif
+endfunction
+
+function! s:initGitRepoIfRequired(behaviour)
+  if !FugitiveIsGitDir(getcwd() . '/.git')
+    if a:behaviour ==# 'ask'
+      let s:yesNo = input('Initialise git repository? (y/n) ')
+    elseif a:behaviour ==# 'auto'
+      let s:yesNo = 'yes'
+    endif
+    if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
+      !git init
+    endif
+  endif
+endfunction
+
+function! s:getGitRoot()
+  let root = split(system('git rev-parse --show-toplevel'), '\n')[0]
+  return v:shell_error ? '' : root
+endfunction
+
+function! s:browseProject()
+  let l:opts = { 
+        \ 'sink*' : function('s:switchToFile'),
+        \ 'down': '40%',
+        \ 'options': '--print-query',
+        \ }
+  let l:gitRoot = s:getGitRoot()
+
+  if !empty(l:gitRoot)
+    let l:opts['dir'] = l:gitRoot
+    let l:is_win = has('win32') || has('win64')
+    let l:opts['source'] = 'git ls-files' . (l:is_win ? '' : ' | uniq')
+  endif
+
+  return fzf#run(l:opts)
+endfunction
+
+function! s:switchToFile(lines)
+  try
+    let autochdir = &autochdir
+    let l:query = a:lines[0]
+    if(len(a:lines) > 1)
+      let l:file = a:lines[1]
+      set noautochdir
+      execute 'edit ' . l:file
+    else
+      let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
+      if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
+        execute 'edit ' . l:query
+        write
+      endif
+    endif
+  finally
+    let &autochdir = autochdir
+  endtry
 endfunction
 
 function! s:generateProjectListLines(dirParts, longest)
