@@ -41,7 +41,7 @@ function! s:formatProjectList(dirs)
 endfunction
 
 function! s:getAllDirsFromWorkspaces(workspaces)
-  let l:dirs = globpath(join(a:workspaces, ','), '*/.git', 1)
+  let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
   let l:output = []
   for dir in split(l:dirs, "\n")
     call add(l:output, fnamemodify(dir, ':h'))
