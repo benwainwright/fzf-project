@@ -3,7 +3,6 @@ function! fzfproject#autoroot#switchroot()
     let l:root = fnamemodify(FugitiveGitDir(), ":h")
     if isdirectory(l:root)
       execute 'cd ' . l:root
-      echom("Switched working directory to " . l:root)
     endif
   endif
 endfunction
