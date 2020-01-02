@@ -19,7 +19,6 @@ function! s:switchToFile(lines)
 endfunction
 
 function! fzfproject#find#file() 
-  echom('foo')
   let l:opts = { 
         \ 'sink*' : function('s:switchToFile'),
         \ 'down': '40%',
@@ -33,6 +32,6 @@ function! fzfproject#find#file()
     let l:is_win = has('win32') || has('win64')
     let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
   endif
-  return fzf#run(l:opts)
+  return fzf#run(fzf#wrap(l:opts))
 endfunction
 
