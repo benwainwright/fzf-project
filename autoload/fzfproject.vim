@@ -6,11 +6,11 @@ let s:chooseFile = get(g:, 'fzfSwitchProjectsAlwaysChooseFile', 1)
 function! fzfproject#switch()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces)
   let l:projects = l:projects + s:projects 
-  call fzf#run({
+  call fzf#wrap(fzf#run({
         \ 'sink': function('s:switchToProjectDir'),
         \ 'source': s:formatProjectList(l:projects),
         \ 'down': '40%',
-        \ })
+        \ }))
 endfunction
 
 function! s:switchToProjectDir(projectLine)
