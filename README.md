@@ -48,10 +48,12 @@ Usage
 Running `FzfSwitchProjects` in command mode will produce a list of folders from
 within your workspace folders that contain a `.git` folder at their root (I
 may make this filtering optional in the future). When you select a project, the
-working directory is changed and the `GitFiles` command from [fzf.vim](https://github.com/junegunn/fzf.vim) is initiated to allow you to switch to a file within the project.
+working directory is changed and the `GitFiles` command from [fzf.vim](https://github.com/junegunn/fzf.vim)
+is initiated to allow you to switch to a file within the project.
 
 Dependencies
 ------------
+
 - [fzf.vim](https://github.com/junegunn/fzf.vim)
 - [fugitive](https://github.com/tpope/vim-fugitive)
 
