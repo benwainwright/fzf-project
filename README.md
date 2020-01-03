@@ -52,6 +52,7 @@ working directory is changed and the `GitFiles` command from [fzf.vim](https://g
 
 Dependencies
 ------------
-requires [fzf.vim](https://github.com/junegunn/fzf.vim) and the [fzf command line tool](https://github.com/junegunn/fzf)
+- [fzf.vim](https://github.com/junegunn/fzf.vim)
+- [fugitive](https://github.com/tpope/vim-fugitive)
 
 
