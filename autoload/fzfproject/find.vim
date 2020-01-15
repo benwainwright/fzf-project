@@ -1,21 +1,23 @@
 function! s:switchToFile(lines)
-  try
-    let autochdir = &autochdir
-    set noautochdir
-    let l:query = a:lines[0]
-    if(len(a:lines) > 1)
-      let l:file = a:lines[1]
-      execute 'edit ' . l:file
-    else
-      let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
-      if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
-        execute 'edit ' . l:query
-        write
+  if(len(a:lines) > 0)
+    try
+      let autochdir = &autochdir
+      set noautochdir
+      let l:query = a:lines[0]
+      if(len(a:lines) > 1)
+        let l:file = a:lines[1]
+        execute 'edit ' . l:file
+      else
+        let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
+        if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
+          execute 'edit ' . l:query
+          write
+        endif
       endif
-    endif
-  finally
-    let &autochdir = autochdir
-  endtry
+    finally
+      let &autochdir = autochdir
+    endtry
+  endif
 endfunction
 
 function! fzfproject#find#file() 
