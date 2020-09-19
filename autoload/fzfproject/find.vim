@@ -34,6 +34,15 @@ function! fzfproject#find#file()
     let l:is_win = has('win32') || has('win64')
     let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
   endif
-  return fzf#run(fzf#wrap(l:opts))
+
+  let l:run_response = fzf#run(fzf#wrap(l:opts))
+
+  " Fixes issue with NeoVim
+  " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
+  if has("nvim")
+    call feedkeys('i')
+  endif
+
+  return l:run_response
 endfunction
 
