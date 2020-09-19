@@ -12,6 +12,13 @@ function! fzfproject#switch()
     \ 'down': '40%'
     \ }
   call fzf#run(fzf#wrap(l:opts))
+
+  " Fixes issue with NeoVim
+  " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
+  if has("nvim")
+    call feedkeys('i')
+  endif
+
 endfunction
 
 function! s:switchToProjectDir(projectLine)
