@@ -13,11 +13,6 @@ function! fzfproject#switch()
     \ }
   call fzf#run(fzf#wrap(l:opts))
 
-  " Fixes issue with NeoVim
-  " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
-  if has("nvim")
-    call feedkeys('i')
-  endif
 
 endfunction
 
@@ -34,6 +29,11 @@ function! s:switchToProjectDir(projectLine)
 
     if s:chooseFile
       call fzfproject#find#file() 
+      " Fixes issue with NeoVim
+      " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
+      if has("nvim")
+        call feedkeys('i')
+      endif
     endif
 
   finally
