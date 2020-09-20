@@ -59,6 +59,11 @@ directory:
 - `auto` always initialise a new git repository if one isn't found
 - `none` do nothing
 
+## Commands
+
+- `:FzfSwitchProject` - open project switcher
+- `:FzfChooseProjectFile` - switch file within project
+
 ## Dependencies
 
 - [fzf.vim](https://github.com/junegunn/fzf.vim)
