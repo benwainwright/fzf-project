@@ -1,21 +1,37 @@
-fzf-switch-project
-==================
+# fzf-switch-project
 
 This plugin provides an easy way of switching between project directories
-indexed from a specified workspace folder or folders. I originally stole 
+indexed from a specified workspace folder or folders. I originally stole
 from [kieran-bamforth](https://github.com/kieran-bamforth) 's dotfiles.
 
-Install
--------
+## Install
 
-#### Install via Plug:
+#### Install via Plug
 
 ```vim
 Plug 'benwainwright/fzf-switch-project'
 ```
 
-Configure
----------
+## Usage
+
+Running `FzfSwitchProjects` in command mode will produce a list of folders from
+within your workspace folders. When you select a project, the working directory
+is changed and you are presented with a fzf list of files to switch to.
+
+## AutoRooting
+
+Installing `FzfSwitchProjects` will automatically `cd` to the root directory of
+any given project when you open a file. It does this by recursively locating the
+nearest `.git` folder in the directory hierarchy. For this reason, is
+recommended to use `git` with this plugin
+
+## Git Initialisation
+
+To assist with the above, if you switch to a folder that does not contain a
+`.git` repository, you have the option of automatically creating one. This
+behavior can be configured below.
+
+## Configure
 
 ```vim
 let g:fzfSwitchProjectWorkspaces = [ '~/workspace1', '~/workspace2' ]
@@ -31,30 +47,18 @@ add individual folders to the project list (I use it for my
 dotfiles folder)
 
 ```vim
-let g:fzfSwitchProjectsGitInitBehaviour = 'ask' " default
+let g:fzfSwitchProjectsGitInitBehavior = 'ask' " default
 ```
 
-`fzf-switch-project` can automatically initialise a git repository for you if
-you switch to a project folder without one. The possible values are:
+what to do if you switch to a project folder that doesn't contain a `.git`
+directory:
 
 - `ask` (default) prompt the user to confirm if a new git repository should be
-    initialised
+  initialised
 - `auto` always initialise a new git repository if one isn't found
 - `none` do nothing
 
-Usage
------
-
-Running `FzfSwitchProjects` in command mode will produce a list of folders from
-within your workspace folders that contain a `.git` folder at their root (I
-may make this filtering optional in the future). When you select a project, the
-working directory is changed and the `GitFiles` command from [fzf.vim](https://github.com/junegunn/fzf.vim)
-is initiated to allow you to switch to a file within the project.
-
-Dependencies
-------------
+## Dependencies
 
 - [fzf.vim](https://github.com/junegunn/fzf.vim)
 - [fugitive](https://github.com/tpope/vim-fugitive)
-
-

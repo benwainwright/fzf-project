@@ -1,6 +1,6 @@
 let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
-let s:gitInit = get(g:, 'fzfSwitchProjectsGitInitBehaviour', 'ask')
+let s:gitInit = get(g:, 'fzfSwitchProjectsGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectsAlwaysChooseFile', 1)
 
 function! fzfproject#switch()
@@ -12,8 +12,6 @@ function! fzfproject#switch()
     \ 'down': '40%'
     \ }
   call fzf#run(fzf#wrap(l:opts))
-
-
 endfunction
 
 function! s:switchToProjectDir(projectLine)
@@ -89,4 +87,3 @@ function! s:initGitRepoIfRequired(behaviour)
     endif
   endif
 endfunction
-
