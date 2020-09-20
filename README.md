@@ -62,7 +62,7 @@ directory:
 Command that is executed to get a list of all the files in a given project
 
 ```vim
-let g:fzfSwitchProjectFindFilesCommand = 'git ls-files --others --exclude-standard --cached' " default'
+let g:fzfSwitchProjectFindFilesCommand = 'git ls-files --others --exclude-standard --cached' " default
 ```
 
 Don't automatically open a file picker once project is selected
