@@ -1,7 +1,7 @@
 let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
-let s:gitInit = get(g:, 'fzfSwitchProjectsGitInitBehavior', 'ask')
-let s:chooseFile = get(g:, 'fzfSwitchProjectsAlwaysChooseFile', 1)
+let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
+let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 
 function! fzfproject#switch()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces)

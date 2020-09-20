@@ -1,3 +1,5 @@
+let s:listFilesCommand = get(g:, 'fzfSwitchProjectFindFilesCommand', 'git ls-files --others --exclude-standard --cached')
+
 function! s:switchToFile(lines)
   if(len(a:lines) > 0)
     try
@@ -32,7 +34,7 @@ function! fzfproject#find#file()
         \ }
   if FugitiveIsGitDir(getcwd() . '/.git') 
     let l:is_win = has('win32') || has('win64')
-    let l:opts['source'] = 'git ls-files --others --exclude-standard --cached' . (l:is_win ? '' : ' | uniq')
+    let l:opts['source'] = s:listFilesCommand . (l:is_win ? '' : ' | uniq')
   endif
 
   return fzf#run(fzf#wrap(l:opts))

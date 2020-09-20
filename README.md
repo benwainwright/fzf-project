@@ -48,7 +48,7 @@ add individual folders to the project list (I use it for my
 dotfiles folder)
 
 ```vim
-let g:fzfSwitchProjectsGitInitBehavior = 'ask' " default
+let g:fzfSwitchProjectGitInitBehavior = 'ask' " default
 ```
 
 what to do if you switch to a project folder that doesn't contain a `.git`
@@ -58,6 +58,19 @@ directory:
   initialised
 - `auto` always initialise a new git repository if one isn't found
 - `none` do nothing
+
+Command that is executed to get a list of all the files in a given project
+
+```vim
+let g:fzfSwitchProjectFindFilesCommand = 'git ls-files --others
+--exclude-standard --cached " default'
+```
+
+Don't automatically open a file picker once project is selected
+
+```vim
+let g:fzfSwitchProjectAlwaysChooseFile = 0
+```
 
 ## Commands
 
