@@ -61,8 +61,8 @@ directory:
 
 ## Commands
 
-- `:FzfSwitchProject` - open project switcher
-- `:FzfChooseProjectFile` - switch file within project
+- `FzfSwitchProject` - open project switcher
+- `FzfChooseProjectFile` - switch file within project
 
 ## Dependencies
 
