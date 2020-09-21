@@ -12,7 +12,7 @@ dotfiles.
 #### Install via Plug
 
 ```vim
-Plug 'benwainwright/fzf-switch-project'
+Plug 'benwainwright/fzf-project'
 ```
 
 ## Usage
