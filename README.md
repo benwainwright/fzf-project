@@ -5,6 +5,8 @@ indexed from a specified workspace folder or folders. It's based on an idea I
 originally stole from [kieran-bamforth](https://github.com/kieran-bamforth)'s
 dotfiles.
 
+![doc/images/fzf-project.gif]
+
 ## Install
 
 #### Install via Plug
