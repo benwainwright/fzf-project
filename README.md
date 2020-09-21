@@ -5,7 +5,7 @@ indexed from a specified workspace folder or folders. It's based on an idea I
 originally stole from [kieran-bamforth](https://github.com/kieran-bamforth)'s
 dotfiles.
 
-![Screen Capture](./doc/images/fzf-project.gif | width=100)
+![Screen Capture](./doc/images/fzf-project.gif)
 
 ## Install
 
