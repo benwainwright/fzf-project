@@ -12,7 +12,16 @@ dotfiles.
 #### Install via Plug
 
 ```vim
+Plug 'junegunn/fzf.vim' "requirement from benwainwright/fzf-project
+Plug 'tpope/vim-fugitive' "requirement from benwainwright/fzf-project
 Plug 'benwainwright/fzf-project'
+```
+#### Install via Vundle
+
+```vim
+Plugin 'junegunn/fzf.vim' "requirement from benwainwright/fzf-project
+Plugin 'tpope/vim-fugitive' "requirement from benwainwright/fzf-project
+Plugin 'benwainwright/fzf-project'
 ```
 
 ## Usage
