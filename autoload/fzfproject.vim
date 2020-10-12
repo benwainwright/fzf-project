@@ -29,7 +29,7 @@ function! s:switchToProjectDir(projectLine)
       call fzfproject#find#file() 
       " Fixes issue with NeoVim
       " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
-      if has("nvim")
+      if has("nvim") && !has("nvim-0.5.0")
         call feedkeys('i')
       endif
     endif
