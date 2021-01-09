@@ -42,9 +42,6 @@ endfunction
 
 function! s:getAllDirsFromWorkspaces(workspaces, depth)
 
-  echo("DEPTH")
-  echo(a:depth)
-
   if len(a:workspaces) == 0
     return []
   endif
