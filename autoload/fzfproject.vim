@@ -2,7 +2,7 @@ let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
-let s:recursionDepth = get(g:, 'fzfSwitchProjectRecursionDepth', 1)
+let s:projectDepth = get(g:, 'fzfSwichProjectProjectDepth', 1)
 
 function! fzfproject#switch()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces, 1)
@@ -52,7 +52,7 @@ function! s:getAllDirsFromWorkspaces(workspaces, depth)
   let l:nonProjectFolders = []
 
   for dir in split(l:dirs, "\n")
-    if FugitiveIsGitDir(dir . '/.git') || a:depth == s:recursionDepth
+    if FugitiveIsGitDir(dir . '/.git') || a:depth == s:projectDepth
       call add(l:projectFolders, fnamemodify(dir, ':h'))
     else
       call add(l:nonProjectFolders, fnamemodify(dir, ':h'))
