@@ -39,13 +39,20 @@ function! s:switchToProjectDir(projectLine)
   endtry
 endfunction
 
+" TODO: for each dir, if it is a git dir, add it to the list, otherwise
+" recurse
 function! s:getAllDirsFromWorkspaces(workspaces)
   let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
   let l:output = []
+  let l:nonGitDirs
   for dir in split(l:dirs, "\n")
-    call add(l:output, fnamemodify(dir, ':h'))
+    if FugitiveIsGitDir(dir . '/.git')
+      call add(l:output, fnamemodify(dir, ':h'))
+    else
+      call add(l:nonGitDirs, fnamemodify(dir, ':h'))
+    endif
   endfor
-  return l:output
+  return l:output + s:getAllDirsFromWorkspaces(l:nonGitDirs)
 endfunction
 
 function! s:formatProjectList(dirs)
