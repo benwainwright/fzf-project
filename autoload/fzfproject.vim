@@ -39,9 +39,11 @@ function! s:switchToProjectDir(projectLine)
   endtry
 endfunction
 
-" TODO: for each dir, if it is a git dir, add it to the list, otherwise
-" recurse
 function! s:getAllDirsFromWorkspaces(workspaces)
+  " base case
+  if len(a:workspaces) == 0
+    return []
+  endif
   let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
   let l:output = []
   let l:nonGitDirs = []
