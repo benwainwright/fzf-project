@@ -16,6 +16,7 @@ Plug 'junegunn/fzf.vim' "requirement from benwainwright/fzf-project
 Plug 'tpope/vim-fugitive' "requirement from benwainwright/fzf-project
 Plug 'benwainwright/fzf-project'
 ```
+
 #### Install via Vundle
 
 ```vim
@@ -54,6 +55,26 @@ automatically list projects in the above folders
 ```vim
 let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 ```
+
+Set the project folder depth
+
+```
+let g:fzfSwitchProjectProjectDepth = 1 " default
+```
+
+When this is set to 1 (the default), only the _immediate children_ of workspace
+folders are considered project folders. If it is set to a number greater than 1,
+then the project finder will recurse that many times to find project folders.
+E.g. if it is set to 2, the grand children of workspace folders are considered
+project folders, and if set to 3, the great-grandchildren.
+
+Note, that if during recursion any folder is found to contain a ".git" folder
+(and is therefore a git project), that folder is automatically considered a
+project folder and recursion will not continue.
+
+If this setting is set to the string 'infinite' (or indeed any value other than
+a number greater than 0), recursion continues infinitely until exhaustion or a
+`.git` project is found.
 
 add individual folders to the project list (I use it for my
 dotfiles folder)
