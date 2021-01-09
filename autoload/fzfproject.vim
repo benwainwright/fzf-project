@@ -2,9 +2,10 @@ let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
+let s:recursionDepth = get(g:, 'fzfSwitchProjectRecursionDepth', 1)
 
 function! fzfproject#switch()
-  let l:projects = s:getAllDirsFromWorkspaces(s:workspaces)
+  let l:projects = s:getAllDirsFromWorkspaces(s:workspaces, 1)
   let l:projects = l:projects + s:projects 
   let l:opts = {
     \ 'sink': function('s:switchToProjectDir'),
@@ -39,13 +40,30 @@ function! s:switchToProjectDir(projectLine)
   endtry
 endfunction
 
-function! s:getAllDirsFromWorkspaces(workspaces)
+function! s:getAllDirsFromWorkspaces(workspaces, depth)
+
+  echo("DEPTH")
+  echo(a:depth)
+
+  if len(a:workspaces) == 0
+    return []
+  endif
+
   let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
-  let l:output = []
+
+  let l:projectFolders = []
+  let l:nonProjectFolders = []
+
   for dir in split(l:dirs, "\n")
-    call add(l:output, fnamemodify(dir, ':h'))
+    if FugitiveIsGitDir(dir . '/.git') || a:depth == s:recursionDepth
+      call add(l:projectFolders, fnamemodify(dir, ':h'))
+    else
+      call add(l:nonProjectFolders, fnamemodify(dir, ':h'))
+    endif
   endfor
-  return l:output
+  echo(l:projectFolders)
+
+  return l:projectFolders + s:getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
 endfunction
 
 function! s:formatProjectList(dirs)
