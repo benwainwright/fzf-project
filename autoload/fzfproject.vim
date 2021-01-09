@@ -44,7 +44,7 @@ endfunction
 function! s:getAllDirsFromWorkspaces(workspaces)
   let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
   let l:output = []
-  let l:nonGitDirs
+  let l:nonGitDirs = []
   for dir in split(l:dirs, "\n")
     if FugitiveIsGitDir(dir . '/.git')
       call add(l:output, fnamemodify(dir, ':h'))
