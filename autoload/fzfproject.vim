@@ -58,7 +58,6 @@ function! s:getAllDirsFromWorkspaces(workspaces, depth)
       call add(l:nonProjectFolders, fnamemodify(dir, ':h'))
     endif
   endfor
-  echo(l:projectFolders)
 
   return l:projectFolders + s:getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
 endfunction
