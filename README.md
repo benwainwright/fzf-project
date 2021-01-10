@@ -47,43 +47,33 @@ behavior can be configured below.
 ## Configure
 
 ```vim
-let g:fzfSwitchProjectWorkspaces = [ '~/workspace1', '~/workspace2' ]
+let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 ```
 
-automatically list projects in the above folders
+Automatically list projects in the above folders
 
 ```vim
 let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 ```
 
-Set the project folder depth
+Add individual folders to the project list (I use it for my
+dotfiles folder)
 
 ```
 let g:fzfSwitchProjectProjectDepth = 1 " default
 ```
 
-When this is set to 1 (the default), only the _immediate children_ of workspace
-folders are considered project folders. If it is set to a number greater than 1,
-then the project finder will recurse that many times to find project folders.
-E.g. if it is set to 2, the grand children of workspace folders are considered
-project folders, and if set to 3, the great-grandchildren.
+Set the project folder depth. When this is set to 1 (the default), only the _immediate children_ of workspace folders are considered project folders. If it is set to a number greater than 1, then the project finder will recurse that many times to find project folders. E.g. if it is set to 2, the grand children of workspace folders are considered project folders, and if set to 3, the great-grandchildren.
 
-Note, that if during recursion any folder is found to contain a ".git" folder
-(and is therefore a git project), that folder is automatically considered a
-project folder and recursion will not continue.
+Note, that if during recursion any folder is found to contain a ".git" folder (and is therefore a git project), that folder is automatically considered a project folder and recursion will not continue.
 
-If this setting is set to the string 'infinite' (or indeed any value other than
-a number greater than 0), recursion continues infinitely until exhaustion or a
-`.git` project is found.
-
-add individual folders to the project list (I use it for my
-dotfiles folder)
+If this setting is set to the string 'infinite' (or indeed any value other than a number greater than 0), recursion continues infinitely until exhaustion or a `.git` project is found.
 
 ```vim
 let g:fzfSwitchProjectGitInitBehavior = 'ask' " default
 ```
 
-what to do if you switch to a project folder that doesn't contain a `.git`
+What to do if you switch to a project folder that doesn't contain a `.git`
 directory:
 
 - `ask` (default) prompt the user to confirm if a new git repository should be
@@ -91,17 +81,17 @@ directory:
 - `auto` always initialise a new git repository if one isn't found
 - `none` do nothing
 
-Command that is executed to get a list of all the files in a given project
-
 ```vim
 let g:fzfSwitchProjectFindFilesCommand = 'git ls-files --others --exclude-standard --cached' " default
 ```
 
-Don't automatically open a file picker once project is selected
+Command that is executed to get a list of all the files in a given project
 
 ```vim
 let g:fzfSwitchProjectAlwaysChooseFile = 0
 ```
+
+Don't automatically open a file picker once project is selected
 
 ## Commands
 
