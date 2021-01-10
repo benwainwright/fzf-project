@@ -2,7 +2,7 @@ let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
-let s:projectDepth = get(g:, 'fzfSwichProjectProjectDepth', 1)
+let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
 
 function! fzfproject#switch()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces, 1)
