@@ -2,7 +2,7 @@
 
 This plugin provides an easy way of switching between project directories
 indexed from a specified workspace folder or folders. It's based on an idea I
-originally stole from [kieran-bamforth](https://github.com/kieran-bamforth)'s
+originally stole from [kieran-ohara](https://github.com/kieran-ohara)'s
 dotfiles.
 
 ![Screen Capture](./doc/images/fzf-project.gif)
