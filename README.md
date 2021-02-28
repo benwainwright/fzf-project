@@ -47,7 +47,7 @@ behavior can be configured below.
 ## Configure
 
 ```vim
-let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
+let g:fzfSwitchProjectWorkspaces = [ '~/workspace1', '~/workspace2' ]
 ```
 
 Automatically list projects in the above folders
