@@ -47,7 +47,7 @@ behavior can be configured below.
 ## Configure
 
 ```vim
-let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
+let g:fzfSwitchProjectWorkspaces = [ '~/workspace1', '~/workspace2' ]
 ```
 
 Automatically list projects in the above folders
@@ -59,7 +59,7 @@ let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 Add individual folders to the project list (I use it for my
 dotfiles folder)
 
-```
+```vim
 let g:fzfSwitchProjectProjectDepth = 1 " default
 ```
 
