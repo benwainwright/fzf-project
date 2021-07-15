@@ -5,14 +5,22 @@ function! s:switchToFile(lines)
     try
       let autochdir = &autochdir
       set noautochdir
-      let l:query = a:lines[0]
+      let l:query = a:lines[1]
+
+      let l:commandMap = {
+                        \ 'ctrl-x': 'split',
+                        \ 'ctrl-v': 'vertical split',
+                        \ 'ctrl-t': 'tabe'
+                        \ }
+
+      let l:editCommand = get(l:commandMap, a:lines[1], 'edit')
       if(len(a:lines) > 1)
-        let l:file = a:lines[1]
-        execute 'edit ' . l:file
+        let l:file = a:lines[2]
+        execute  l:editCommand . ' '  . l:file
       else
         let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
         if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
-          execute 'edit ' . l:query
+          execute l:editCommand . ' ' . l:query
           write
         endif
       endif
@@ -28,6 +36,7 @@ function! fzfproject#find#file()
         \ 'down': '40%',
         \ 'options': [
         \ '--print-query',
+        \ '--expect=ctrl-t,ctrl-v,ctrl-x',
         \ '--header', 'Choose existing file, or enter the name of a new file',
         \ '--prompt', 'Filename> ' 
         \ ]
