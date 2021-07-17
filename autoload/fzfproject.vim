@@ -3,7 +3,7 @@ let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
-let s:debug = get(g:, 'fzfSwitchProjectDebug', 1)
+let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
 
 function! fzfproject#execute(command, dir, context)
   let l:command = a:command . ' ' . a:dir
