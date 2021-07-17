@@ -10,7 +10,7 @@ function! fzfproject#execute(command, dir, context)
   if s:debug ==# 1
     echom("FZFProject (" . a:context . ") executing command: '" . l:command . "'")
   endif
-  execute 'noautocmd ' . l:command
+  execute l:command
 endfunction
 
 function! fzfproject#changeDir(dir, context)
