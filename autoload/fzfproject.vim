@@ -3,6 +3,19 @@ let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
+let s:debug = get(g:, 'fzfSwitchProjectDebug', 1)
+
+function! fzfproject#execute(command, dir, context)
+  let l:command = a:command . ' ' . a:dir
+  if s:debug ==# 1
+    echom("FZFProject (" . a:context . ") executing command: '" . l:command . "'")
+  endif
+  execute 'noautocmd ' . l:command
+endfunction
+
+function! fzfproject#changeDir(dir, context)
+  call fzfproject#execute('cd', fnameescape(a:dir), a:context)
+endfunction
 
 function! fzfproject#switch()
   let l:projects = s:getAllDirsFromWorkspaces(s:workspaces, 1)
@@ -21,7 +34,8 @@ function! s:switchToProjectDir(projectLine)
     set noautochdir
     let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
     let l:path = l:parts[2] . '/' . l:parts[1]
-    execute 'cd ' . l:path
+    let w:fzfProjectPath = l:path
+    call fzfproject#changeDir(l:path, "projectSwitcher")
     if s:gitInit !=# 'none'
       call s:initGitRepoIfRequired(s:gitInit)
     endif

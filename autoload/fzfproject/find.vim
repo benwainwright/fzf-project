@@ -16,7 +16,7 @@ function! s:switchToFile(lines)
       let l:editCommand = get(l:commandMap, a:lines[1], 'edit')
       if(len(a:lines) > 1)
         let l:file = a:lines[2]
-        execute  l:editCommand . ' '  . l:file
+        call fzfproject#execute(l:editCommand, fnameescape(l:file), "switchToFile")
       else
         let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
         if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
