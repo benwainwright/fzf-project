@@ -18,7 +18,7 @@ function! fzfproject#changeDir(dir, context)
 endfunction
 
 function! fzfproject#switch()
-  let l:projects = s:getAllDirsFromWorkspaces(s:workspaces, 1)
+  let l:projects = fzfproject#getAllDirsFromWorkspaces(s:workspaces, 1)
   let l:projects = l:projects + s:projects 
   let l:opts = {
     \ 'sink': function('s:switchToProjectDir'),
@@ -54,7 +54,7 @@ function! s:switchToProjectDir(projectLine)
   endtry
 endfunction
 
-function! s:getAllDirsFromWorkspaces(workspaces, depth)
+function! fzfproject#getAllDirsFromWorkspaces(workspaces, depth)
 
   if len(a:workspaces) == 0
     return []
@@ -73,7 +73,7 @@ function! s:getAllDirsFromWorkspaces(workspaces, depth)
     endif
   endfor
 
-  return l:projectFolders + s:getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
+  return l:projectFolders + fzfproject#getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
 endfunction
 
 function! s:formatProjectList(dirs)
