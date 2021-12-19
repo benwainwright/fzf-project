@@ -5,7 +5,7 @@ function! fzfproject#autoroot#switchroot()
 endfunction
 
 function! fzfproject#autoroot#doroot()
-  let l:root = FugitiveGitDir(getcwd())
+  let l:root = FugitiveGitDir()
   if stridx(l:root, ".git") != -1
     let l:root = fnamemodify(l:root, ":h")
   endif
