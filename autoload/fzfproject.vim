@@ -41,7 +41,7 @@ function! s:switchToProjectDir(projectLine)
     endif
 
     if s:chooseFile
-      call fzfproject#find#file() 
+      call fzfproject#find#file(0) 
       " Fixes issue with NeoVim
       " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
       if has("nvim") && !has("nvim-0.5.0")

@@ -30,8 +30,12 @@ function! s:switchToFile(lines)
   endif
 endfunction
 
-function! fzfproject#find#file() 
-  call fzfproject#autoroot#doroot()
+function! fzfproject#find#file(root_first) 
+  
+  if(a:root_first)
+    call fzfproject#autoroot#doroot()
+  endif
+
   let l:opts = { 
         \ 'sink*' : function('s:switchToFile'),
         \ 'down': '40%',
