@@ -30,13 +30,16 @@ function! s:switchToFile(lines)
   endif
 endfunction
 
-function! fzfproject#find#file(root_first) 
+function! fzfproject#find#file(root_first, dir) 
   
   if(a:root_first)
     call fzfproject#autoroot#doroot()
   endif
 
+  let l:dir = a:dir == -1 ? getcwd() : a:dir
+
   let l:opts = { 
+        \ 'dir': '/tmp',
         \ 'sink*' : function('s:switchToFile'),
         \ 'down': '40%',
         \ 'options': [
@@ -48,7 +51,7 @@ function! fzfproject#find#file(root_first)
         \ }
   if FugitiveIsGitDir(getcwd() . '/.git') 
     let l:is_win = has('win32') || has('win64')
-    let l:opts['source'] = s:listFilesCommand . (l:is_win ? '' : ' | uniq')
+    let l:opts['source'] = 'cd ' .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
   endif
 
   return fzf#run(fzf#wrap(l:opts))

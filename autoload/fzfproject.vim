@@ -14,18 +14,35 @@ function! fzfproject#execute(command, dir, context)
 endfunction
 
 function! fzfproject#changeDir(dir, context)
-  call fzfproject#execute('cd', fnameescape(a:dir), a:context)
+  call fzfproject#execute('lcd', fnameescape(a:dir), a:context)
+endfunction
+
+function! s:setFileToSwitchTo(lines)
+  if(len(a:lines) > 0)
+    let l:query = a:lines[1]
+
+    let l:commandMap = {
+                      \ 'ctrl-x': 'split',
+                      \ 'ctrl-v': 'vertical split',
+                      \ 'ctrl-t': 'tabe'
+                      \ }
+
+    let s:editCommand = get(l:commandMap, l:query, 'edit')
+    let s:setFileToSwitchTo = a:lines[2]
+  endif
 endfunction
 
 function! fzfproject#switch()
   let l:projects = fzfproject#getAllDirsFromWorkspaces(s:workspaces, 1)
   let l:projects = l:projects + s:projects 
   let l:opts = {
+    \ 'dir': '/tmp',
     \ 'sink': function('s:switchToProjectDir'),
     \ 'source': s:formatProjectList(l:projects),
     \ 'down': '40%'
     \ }
-  call fzf#run(fzf#wrap(l:opts))
+  let l:wrapped = fzf#wrap(l:opts)
+  call fzf#run(l:opts)
 endfunction
 
 function! s:switchToProjectDir(projectLine)
@@ -41,7 +58,7 @@ function! s:switchToProjectDir(projectLine)
     endif
 
     if s:chooseFile
-      call fzfproject#find#file(0) 
+      call fzfproject#find#file(0, l:path) 
       " Fixes issue with NeoVim
       " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
       if has("nvim") && !has("nvim-0.5.0")
