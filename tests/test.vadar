@@ -1,0 +1,8 @@
+Do:
+  FzfSwitchProject\<CR>repo2\<CR>:pwd\<CR>
+
+Expect:
+  ~/test
+
+
+
