@@ -11,14 +11,13 @@ let s:dirs = fzfproject#getAllDirsFromWorkspaces(s:workspaces, 1)
 function! fzfproject#autoroot#doroot(...)
 
   if a:0 > 0
-
     if a:1 == "/"
       return
     endif
 
     let l:rootToTry = a:1
   else
-    let l:rootToTry = getcwd()
+    let l:root = FugitiveGitDir()
   endif
 
   if index(s:dirs, l:rootToTry) == -1
