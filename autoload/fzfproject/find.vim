@@ -1,6 +1,6 @@
 let s:listFilesCommand = get(g:, 'fzfSwitchProjectFindFilesCommand', 'git ls-files --others --exclude-standard --cached')
 
-function! s:switchToFile(lines)
+function! s:switchToFile(dir, lines)
   if(len(a:lines) > 0)
     try
       let autochdir = &autochdir
@@ -16,7 +16,7 @@ function! s:switchToFile(lines)
       let l:editCommand = get(l:commandMap, a:lines[1], 'edit')
       if(len(a:lines) > 1)
         let l:file = a:lines[2]
-        call fzfproject#execute(l:editCommand, fnameescape(l:file), "switchToFile")
+        call fzfproject#execute(l:editCommand, fnameescape(a:dir .. "/" .. l:file), "switchToFile")
       else
         let s:yesNo = input("Create '" . l:query . "'? (y/n) ")
         if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
@@ -40,7 +40,7 @@ function! fzfproject#find#file(root_first, dir)
 
   let l:opts = { 
         \ 'dir': '/tmp',
-        \ 'sink*' : function('s:switchToFile'),
+        \ 'sink*' : function('s:switchToFile', [l:dir]),
         \ 'down': '40%',
         \ 'options': [
         \ '--print-query',
@@ -49,6 +49,7 @@ function! fzfproject#find#file(root_first, dir)
         \ '--prompt', 'Filename> ' 
         \ ]
         \ }
+
   if FugitiveIsGitDir(getcwd() . '/.git') 
     let l:is_win = has('win32') || has('win64')
     let l:opts['source'] = 'cd ' .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')

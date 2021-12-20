@@ -6,23 +6,24 @@ function! fzfproject#autoroot#switchroot()
   endif
 endfunction
 
-let s:dirs = fzfproject#getAllDirsFromWorkspaces(s:workspaces, 1)
+let s:dirs = fzfproject#finalProjectList()
 
 function! fzfproject#autoroot#doroot(...)
 
-
   if a:0 > 0
-    if a:1 == "."
-      return
-    endif
-
     let l:rootToTry = a:1
   else
     let l:rootToTry = FugitiveGitDir()
   endif
 
   if index(s:dirs, l:rootToTry) == -1
-    call fzfproject#autoroot#doroot(fnamemodify(l:rootToTry, ":h"))
+
+    let l:newRoot = fnamemodify(l:rootToTry, ":h")
+
+    if l:newRoot !=# l:rootToTry
+      call fzfproject#autoroot#doroot(fnamemodify(l:rootToTry, ":h"))
+    endif
+
   else
     call fzfproject#changeDir(l:rootToTry, "doRoot")
   endif

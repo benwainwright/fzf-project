@@ -5,6 +5,30 @@ let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
 let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
 
+function! s:getAllDirsFromWorkspaces(workspaces, depth)
+  if len(a:workspaces) == 0
+    return []
+  endif
+
+  let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
+
+  let l:projectFolders = []
+  let l:nonProjectFolders = []
+
+  for dir in split(l:dirs, "\n")
+    if FugitiveIsGitDir(dir . '/.git') || a:depth == s:projectDepth
+      call add(l:projectFolders, fnamemodify(dir, ':h'))
+    else
+      call add(l:nonProjectFolders, fnamemodify(dir, ':h'))
+    endif
+  endfor
+
+  return l:projectFolders + s:getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
+endfunction
+
+let s:projectsFromWorkspaces = s:getAllDirsFromWorkspaces(s:workspaces, 1)
+let s:projectList = s:projectsFromWorkspaces + s:projects 
+
 function! fzfproject#execute(command, dir, context)
   let l:command = a:command . ' ' . a:dir
   if s:debug ==# 1
@@ -14,7 +38,7 @@ function! fzfproject#execute(command, dir, context)
 endfunction
 
 function! fzfproject#changeDir(dir, context)
-  call fzfproject#execute('lcd', fnameescape(a:dir), a:context)
+  call fzfproject#execute('cd', fnameescape(a:dir), a:context)
 endfunction
 
 function! s:setFileToSwitchTo(lines)
@@ -33,12 +57,10 @@ function! s:setFileToSwitchTo(lines)
 endfunction
 
 function! fzfproject#switch()
-  let l:projects = fzfproject#getAllDirsFromWorkspaces(s:workspaces, 1)
-  let l:projects = l:projects + s:projects 
   let l:opts = {
     \ 'dir': '/tmp',
     \ 'sink': function('s:switchToProjectDir'),
-    \ 'source': s:formatProjectList(l:projects),
+    \ 'source': s:formatProjectList(s:projectList),
     \ 'down': '40%'
     \ }
   let l:wrapped = fzf#wrap(l:opts)
@@ -71,26 +93,9 @@ function! s:switchToProjectDir(projectLine)
   endtry
 endfunction
 
-function! fzfproject#getAllDirsFromWorkspaces(workspaces, depth)
 
-  if len(a:workspaces) == 0
-    return []
-  endif
-
-  let l:dirs = globpath(join(a:workspaces, ','), '*/', 1)
-
-  let l:projectFolders = []
-  let l:nonProjectFolders = []
-
-  for dir in split(l:dirs, "\n")
-    if FugitiveIsGitDir(dir . '/.git') || a:depth == s:projectDepth
-      call add(l:projectFolders, fnamemodify(dir, ':h'))
-    else
-      call add(l:nonProjectFolders, fnamemodify(dir, ':h'))
-    endif
-  endfor
-
-  return l:projectFolders + fzfproject#getAllDirsFromWorkspaces(l:nonProjectFolders, a:depth + 1)
+function! fzfproject#finalProjectList()
+  return s:projectList
 endfunction
 
 function! s:formatProjectList(dirs)
