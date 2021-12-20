@@ -17,7 +17,7 @@ function! fzfproject#autoroot#doroot(...)
 
     let l:rootToTry = a:1
   else
-    let l:root = FugitiveGitDir()
+    let l:rootToTry = FugitiveGitDir()
   endif
 
   if index(s:dirs, l:rootToTry) == -1
