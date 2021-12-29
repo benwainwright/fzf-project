@@ -57,8 +57,9 @@ function! s:setFileToSwitchTo(lines)
 endfunction
 
 function! fzfproject#switch()
+  let l:is_win = has('win32') || has('win64')
   let l:opts = {
-    \ 'dir': '/tmp',
+    \ 'dir': l:is_win ? $TEMP : '/tmp',
     \ 'sink': function('s:switchToProjectDir'),
     \ 'source': s:formatProjectList(s:projectList),
     \ 'down': '40%'
