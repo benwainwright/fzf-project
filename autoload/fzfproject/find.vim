@@ -37,9 +37,9 @@ function! fzfproject#find#file(root_first, dir)
   endif
 
   let l:dir = a:dir == -1 ? getcwd() : a:dir
-
-  let l:opts = { 
-        \ 'dir': '/tmp',
+  let l:is_win = has('win32') || has('win64')
+  let l:opts = {
+        \ 'dir': l:is_win ? $TEMP : '/tmp',
         \ 'sink*' : function('s:switchToFile', [l:dir]),
         \ 'down': '40%',
         \ 'options': [
@@ -51,8 +51,7 @@ function! fzfproject#find#file(root_first, dir)
         \ }
 
   if FugitiveIsGitDir(getcwd() . '/.git') 
-    let l:is_win = has('win32') || has('win64')
-    let l:opts['source'] = 'cd ' .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
+    let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
   endif
 
   return fzf#run(fzf#wrap(l:opts))
