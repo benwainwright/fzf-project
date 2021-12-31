@@ -16,6 +16,9 @@ function! s:getAllDirsFromWorkspaces(workspaces, depth)
   let l:nonProjectFolders = []
 
   for dir in split(l:dirs, "\n")
+    if has('win32') || has('win64')
+       let dir = substitute(dir, "\\", "\/", "g")
+    endif
     if FugitiveIsGitDir(dir . '/.git') || a:depth == s:projectDepth
       call add(l:projectFolders, fnamemodify(dir, ':h'))
     else
