@@ -38,12 +38,6 @@ any given project when you open a file. It does this by recursively locating the
 nearest `.git` folder in the directory hierarchy. For this reason, is
 recommended to use `git` with this plugin
 
-## Git Initialisation
-
-To assist with the above, if you switch to a folder that does not contain a
-`.git` repository, you have the option of automatically creating one. This
-behavior can be configured below.
-
 ## Configure
 
 ```vim
@@ -68,18 +62,6 @@ Set the project folder depth. When this is set to 1 (the default), only the _imm
 Note, that if during recursion any folder is found to contain a ".git" folder (and is therefore a git project), that folder is automatically considered a project folder and recursion will not continue.
 
 If this setting is set to the string 'infinite' (or indeed any value other than a number greater than 0), recursion continues infinitely until exhaustion or a `.git` project is found.
-
-```vim
-let g:fzfSwitchProjectGitInitBehavior = 'ask' " default
-```
-
-What to do if you switch to a project folder that doesn't contain a `.git`
-directory:
-
-- `ask` (default) prompt the user to confirm if a new git repository should be
-  initialised
-- `auto` always initialise a new git repository if one isn't found
-- `none` do nothing
 
 ```vim
 let g:fzfSwitchProjectFindFilesCommand = 'git ls-files --others --exclude-standard --cached' " default

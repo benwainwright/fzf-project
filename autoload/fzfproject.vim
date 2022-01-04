@@ -1,6 +1,5 @@
 let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
-let s:gitInit = get(g:, 'fzfSwitchProjectGitInitBehavior', 'ask')
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
 let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
@@ -75,9 +74,6 @@ function! s:switchToProjectDir(projectLine)
     let l:path = l:parts[2] . '/' . l:parts[1]
     let w:fzfProjectPath = l:path
     call fzfproject#changeDir(l:path, "projectSwitcher")
-    if s:gitInit !=# 'none'
-      call s:initGitRepoIfRequired(s:gitInit)
-    endif
 
     if s:chooseFile
       call fzfproject#find#file(0, l:path) 
@@ -123,17 +119,4 @@ function! s:generateProjectListLines(dirParts, longest)
     call add(l:outputLines, l:line)
   endfor
   return l:outputLines
-endfunction
-
-function! s:initGitRepoIfRequired(behaviour)
-  if !FugitiveIsGitDir(getcwd() . '/.git')
-    if a:behaviour ==# 'ask'
-      let s:yesNo = input('Initialise git repository? (y/n) ')
-    elseif a:behaviour ==# 'auto'
-      let s:yesNo = 'yes'
-    endif
-    if s:yesNo ==? 'y' || s:yesNo ==? 'yes'
-      !git init
-    endif
-  endif
 endfunction
