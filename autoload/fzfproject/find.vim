@@ -50,9 +50,7 @@ function! fzfproject#find#file(root_first, dir)
         \ ]
         \ }
 
-  if FugitiveIsGitDir(getcwd() . '/.git') 
-    let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
-  endif
+  let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
 
   return fzf#run(fzf#wrap(l:opts))
 endfunction
