@@ -75,6 +75,12 @@ let g:fzfSwitchProjectAlwaysChooseFile = 0
 
 Don't automatically open a file picker once project is selected
 
+```vim
+let g:fzfSwitchProjectCloseOpenedBuffers = 0
+```
+
+Set this to 1 if you want to close and delete all opened buffers after switching to a different project, it will only close and delete opened buffers if all updated buffers are saved.
+
 ## Commands
 
 - `FzfSwitchProject` - open project switcher
