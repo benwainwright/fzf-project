@@ -2,6 +2,7 @@ let s:workspaces = get(g:, 'fzfSwitchProjectWorkspaces', [])
 let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:chooseFile = get(g:, 'fzfSwitchProjectAlwaysChooseFile', 1)
 let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
+let s:closeOpenedBuffers = get(g:, 'fzfSwitchProjectCloseOpenedBuffers', 0)
 let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
 
 function! s:getAllDirsFromWorkspaces(workspaces, depth)
@@ -77,6 +78,11 @@ function! s:switchToProjectDir(projectLine)
     let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
     let l:path = l:parts[2] . '/' . l:parts[1]
     let w:fzfProjectPath = l:path
+
+    if s:closeOpenedBuffers
+      execute 'bufdo bwipeout'
+    endif
+
     call fzfproject#changeDir(l:path, "projectSwitcher")
 
     if s:chooseFile
