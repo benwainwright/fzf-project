@@ -5,4 +5,4 @@ augroup projectSwitcher
 augroup END
 
 command! FzfSwitchProject call fzfproject#switch()
-command! FzfChooseProjectFile call fzfproject#find#file(1, -1)
+command! FzfChooseProjectFile call fzfproject#find#file(1, -1, '')

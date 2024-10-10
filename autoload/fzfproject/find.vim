@@ -1,4 +1,6 @@
+let s:projects = get(g:, 'fzfSwitchProjectProjects', [])
 let s:listFilesCommand = get(g:, 'fzfSwitchProjectFindFilesCommand', 'git ls-files --others --exclude-standard --cached')
+let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
 
 function! s:switchToFile(dir, lines)
 
@@ -38,6 +40,25 @@ function! fzfproject#find#file(root_first, dir, command)
   endif
 
   let l:dir = a:dir == -1 ? getcwd() : a:dir
+
+  echom l:dir
+
+  let l:command = ''
+
+  for project in s:projects
+    if (type(project) == type({}) && expand(project['path']) == expand(l:dir))
+      let l:command = project['command']
+    endif
+  endfor
+
+  if (l:command == '')
+      let l:command = a:command ==# ''  ? s:listFilesCommand : a:command
+  end
+
+  if s:debug ==# 1
+    echom("FZFProject list command: '" . l:command . "'")
+  endif
+
   let l:is_win = has('win32') || has('win64')
   let l:opts = {
         \ 'dir': l:is_win ? $TEMP : '/tmp',
@@ -51,7 +72,6 @@ function! fzfproject#find#file(root_first, dir, command)
         \ ]
         \ }
 
-  let l:command = a:command ==# '' ? s:listFilesCommand : a:command
   let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. l:command . (l:is_win ? '' : ' | uniq')
 
   return fzf#run(fzf#wrap(l:opts))
