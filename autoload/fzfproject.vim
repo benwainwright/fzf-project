@@ -5,6 +5,8 @@ let s:projectDepth = get(g:, 'fzfSwitchProjectProjectDepth', 1)
 let s:closeOpenedBuffers = get(g:, 'fzfSwitchProjectCloseOpenedBuffers', 0)
 let s:debug = get(g:, 'fzfSwitchProjectDebug', 0)
 
+let s:commands = {}
+
 function! s:getAllDirsFromWorkspaces(workspaces, depth)
   if len(a:workspaces) == 0
     return []
@@ -76,7 +78,7 @@ function! s:switchToProjectDir(projectLine)
     let autochdir = &autochdir
     set noautochdir
     let l:parts = matchlist(a:projectLine, '\(\S\+\)\s\+\(\S\+\)')
-    let l:path = l:parts[2] . '/' . l:parts[1]
+    let l:path = s:commands[a:projectLine]['path']
     let w:fzfProjectPath = l:path
 
     if s:closeOpenedBuffers
@@ -86,7 +88,7 @@ function! s:switchToProjectDir(projectLine)
     call fzfproject#changeDir(l:path, "projectSwitcher")
 
     if s:chooseFile
-      call fzfproject#find#file(0, l:path) 
+      call fzfproject#find#file(0, l:path, s:commands[a:projectLine]['command']) 
       " Fixes issue with NeoVim
       " See https://github.com/junegunn/fzf/issues/426#issuecomment-158115912
       if has("nvim") && !has("nvim-0.5.0")
@@ -108,12 +110,21 @@ function! s:formatProjectList(dirs)
   let l:dirParts = [  ]
   let l:longest = 0
   for dir in a:dirs
-    let l:name = fnamemodify(dir, ':t')
+    if type(dir) == type({})
+      let l:name = has_key(dir, "name") ? dir['name'] : fnamemodify(dir['path'], ':t')
+      let l:command = dir['command']
+      let l:dirPath = dir['path']
+    else
+      let l:name = fnamemodify(dir, ':t')
+      let l:command = ''
+      let l:dirPath = dir
+    endif
+
     let l:length = len(l:name)
     if l:length > l:longest
       let l:longest = l:length
     endif
-    let dir = { 'name' : l:name, 'dir' : fnamemodify(dir, ':h') }
+    let dir = { 'name' : l:name, 'dir' : fnamemodify(l:dirPath, ':h'), 'command': l:command, 'fullPath': l:dirPath }
     call add(l:dirParts, dir)
   endfor
   return s:generateProjectListLines(l:dirParts, l:longest) 
@@ -126,6 +137,9 @@ function! s:generateProjectListLines(dirParts, longest)
     let l:line = dir['name'] 
           \ . repeat(' ', l:padding) 
           \ . ' ' . dir['dir']
+
+    let s:commands[l:line] = { 'command': dir['command'], 'path': dir['fullPath'] }
+
     call add(l:outputLines, l:line)
   endfor
   return l:outputLines

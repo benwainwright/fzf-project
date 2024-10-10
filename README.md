@@ -53,6 +53,7 @@ let g:fzfSwitchProjectProjects = [ '~/folder1', '~/folder2' ]
 Add individual folders to the project list (I use it for my
 dotfiles folder)
 
+
 ```vim
 let g:fzfSwitchProjectProjectDepth = 1 " default
 ```

@@ -1,6 +1,7 @@
 let s:listFilesCommand = get(g:, 'fzfSwitchProjectFindFilesCommand', 'git ls-files --others --exclude-standard --cached')
 
 function! s:switchToFile(dir, lines)
+
   if(len(a:lines) > 0)
     try
       let autochdir = &autochdir
@@ -30,7 +31,7 @@ function! s:switchToFile(dir, lines)
   endif
 endfunction
 
-function! fzfproject#find#file(root_first, dir) 
+function! fzfproject#find#file(root_first, dir, command) 
   
   if(a:root_first)
     call fzfproject#autoroot#doroot()
@@ -50,7 +51,8 @@ function! fzfproject#find#file(root_first, dir)
         \ ]
         \ }
 
-  let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. s:listFilesCommand . (l:is_win ? '' : ' | uniq')
+  let l:command = a:command ==# '' ? s:listFilesCommand : a:command
+  let l:opts['source'] = 'cd ' . (l:is_win ? '/d' : '') .. l:dir .. ' && ' .. l:command . (l:is_win ? '' : ' | uniq')
 
   return fzf#run(fzf#wrap(l:opts))
 endfunction
